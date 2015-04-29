@@ -30,14 +30,18 @@ namespace TexasPokerCaculator
 
         public static Dictionary<int, string> PokerTypesForPokerStack;
         public static Dictionary<int, string> PokerPointForPokerStack;
+        private const int CardWidth = 71;
+        private const int CardHeight = 95;
+        private Rectangle CommonPokerPoolRect;
+        private Rectangle DealerPokerPoolRect; 
 
         public Form1()
         {
             InitializeComponent();
         }
         static Form1()
-        { 
-        
+        {
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -80,14 +84,15 @@ namespace TexasPokerCaculator
             int leftMargin = (tablePicWidth - centralAreaWidth) / 2;
             int topMargin = (tablePicHeight - centralAreaHeight) / 2;
 
-            int pokerWidth = 38;
-            int pokerHeight = 72;
+            int pokerWidth = CardWidth;
+            int pokerHeight = CardHeight;
             int pokerGap = 10;
 
             int pokerPoolWidth = pokerWidth * 5 + pokerGap * 4;
             int pokerPoolHeight = pokerHeight;
             int pokerPoolLeft = leftMargin + (centralAreaWidth - pokerPoolWidth) / 2;
-            int pokerPoolTop = (int) (topMargin + (centralAreaHeight - pokerPoolHeight) / 2 - centralAreaHeight * 0.2);
+            int pokerPoolTop = (int)(topMargin + (centralAreaHeight - pokerPoolHeight) / 2 - centralAreaHeight * 0.2);
+            CommonPokerPoolRect = new Rectangle(pokerPoolLeft, pokerPoolTop, pokerPoolWidth, pokerPoolHeight);
             g.DrawRectangle(Pens.Red, pokerPoolLeft, pokerPoolTop, pokerPoolWidth, pokerPoolHeight);
 
             g.DrawRectangle(Pens.Red, pokerPoolLeft, pokerPoolTop, pokerWidth, pokerHeight);
@@ -100,6 +105,7 @@ namespace TexasPokerCaculator
             int dealerPokerPoolHeight = pokerHeight;
             int dealerPokeroolLeft = leftMargin + (centralAreaWidth - dealerPokerPoolWidth) / 2;
             int dealerPokerPoolTop = topMargin + centralAreaHeight - pokerPoolHeight;
+            DealerPokerPoolRect = new Rectangle(dealerPokeroolLeft, dealerPokerPoolTop, dealerPokerPoolWidth, dealerPokerPoolHeight);
             g.DrawRectangle(Pens.Red, dealerPokeroolLeft, dealerPokerPoolTop, dealerPokerPoolWidth, dealerPokerPoolHeight);
 
             g.DrawRectangle(Pens.Red, dealerPokeroolLeft, dealerPokerPoolTop, pokerWidth, pokerHeight);
@@ -168,10 +174,6 @@ namespace TexasPokerCaculator
             g.DrawRectangle(Pens.Red, rect_Player6);
         }
 
-        private void DrawPokerStackHighlightBox()
-        {
-
-        }
         #endregion
 
 
@@ -220,17 +222,31 @@ namespace TexasPokerCaculator
         }
 
         private void DrawPokerCard(Graphics g, Poker.PokerSuits pokerSuit, int pokerPoint, Point location)
-        { 
+        {
             // Details the all-in-one image
-            // maginLeft =1
+            // marginLeft =1
             // margin top =1
             // gap between cars =1
             // card width =71
             // card Height = 95
-
+            int marginLeft = 1;
+            int marginTop = 1;
+            int gapX = 2;
+            int gapY = 3;
+            int cardWidth = 71;
+            int cardHeight = 95;
+            
             int colIndex = GetPokerColumnIndexInBigImage(pokerPoint);
             int rowIndex = GetPokerRowIndexInBigImage(pokerSuit);
-        
+
+            int x = marginLeft + colIndex * cardWidth + colIndex * gapX;
+            int y = marginTop + rowIndex * cardHeight + rowIndex * gapY;
+
+            Bitmap source = new Bitmap(TexasPokerCaculator.Properties.Resources.PokerCards);
+            Rectangle section = new Rectangle(x, y, cardWidth, cardHeight);
+            Bitmap CroppedImage = source.Clone(section, source.PixelFormat);
+            g.DrawImage(CroppedImage, location);
+            source.Dispose();
         }
 
         /// <summary>
@@ -280,7 +296,7 @@ namespace TexasPokerCaculator
         }
 
         private int ColumnInStackToPokerPoint(int xPokerIndex)
-        { 
+        {
             return xPokerIndex;
         }
         /// <summary>
@@ -307,7 +323,7 @@ namespace TexasPokerCaculator
             {
                 return Poker.PokerSuits.Clubs;
             }
-            else 
+            else
             {
                 return Poker.PokerSuits.Unknown;
             }
@@ -327,7 +343,8 @@ namespace TexasPokerCaculator
                 Poker.PokerSuits pokerSuit = RowInStackToPokerSuit(yPokerIndex);
 
                 Graphics g = this.pictureBox_Table.CreateGraphics();
-                DrawPokerCard(g, pokerSuit, pokerPoint, new Point(0, 0));
+                DrawPokerCard(g, pokerSuit, pokerPoint, CommonPokerPoolRect.Location);
+                DrawPokerCard(g, pokerSuit, pokerPoint, DealerPokerPoolRect.Location);
             }
         }
     }
