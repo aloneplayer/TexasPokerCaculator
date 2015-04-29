@@ -40,6 +40,50 @@ namespace TexasPokerCaculator
 
 
         #region UI functions
+        /// <summary>
+        /// Draw common poker pools and dealer poker pool
+        /// </summary>
+        /// <param name="g"></param>
+        private void DrawPokerPools(Graphics g)
+        {
+            int tablePicWidth = this.pictureBox_Table.Width;
+            int tablePicHeight = this.pictureBox_Table.Height;
+
+            int centralAreaWidth = (int)(tablePicWidth * 16 / 27.7);
+            int centralAreaHeight = (int)(tablePicHeight * 7.5 / 16);
+
+            int leftMargin = (tablePicWidth - centralAreaWidth) / 2;
+            int topMargin = (tablePicHeight - centralAreaHeight) / 2;
+
+            int pokerWidth = 38;
+            int pokerHeight = 72;
+            int pokerGap = 10;
+
+            int pokerPoolWidth = pokerWidth * 5 + pokerGap * 4;
+            int pokerPoolHeight = pokerHeight;
+            int pokerPoolLeft = leftMargin + (centralAreaWidth - pokerPoolWidth) / 2;
+            int pokerPoolTop = (int) (topMargin + (centralAreaHeight - pokerPoolHeight) / 2 - centralAreaHeight * 0.2);
+            g.DrawRectangle(Pens.Red, pokerPoolLeft, pokerPoolTop, pokerPoolWidth, pokerPoolHeight);
+
+            g.DrawRectangle(Pens.Red, pokerPoolLeft, pokerPoolTop, pokerWidth, pokerHeight);
+            g.DrawRectangle(Pens.Red, pokerPoolLeft + pokerWidth + pokerGap, pokerPoolTop, pokerWidth, pokerHeight);
+            g.DrawRectangle(Pens.Red, pokerPoolLeft + 2 * pokerGap + 2 * pokerWidth, pokerPoolTop, pokerWidth, pokerHeight);
+            g.DrawRectangle(Pens.Red, pokerPoolLeft + 3 * pokerGap + 3 * pokerWidth, pokerPoolTop, pokerWidth, pokerHeight);
+            g.DrawRectangle(Pens.Red, pokerPoolLeft + 4 * pokerGap + 4 * pokerWidth, pokerPoolTop, pokerWidth, pokerHeight);
+
+            int dealerPokerPoolWidth = pokerWidth * 2 + pokerGap;
+            int dealerPokerPoolHeight = pokerHeight;
+            int dealerPokeroolLeft = leftMargin + (centralAreaWidth - dealerPokerPoolWidth) / 2;
+            int dealerPokerPoolTop = topMargin + centralAreaHeight - pokerPoolHeight;
+            g.DrawRectangle(Pens.Red, dealerPokeroolLeft, dealerPokerPoolTop, dealerPokerPoolWidth, dealerPokerPoolHeight);
+
+            g.DrawRectangle(Pens.Red, dealerPokeroolLeft, dealerPokerPoolTop, pokerWidth, pokerHeight);
+            g.DrawRectangle(Pens.Red, dealerPokeroolLeft + pokerWidth + pokerGap, dealerPokerPoolTop, pokerWidth, pokerHeight);
+        }
+        /// <summary>
+        /// Obsolete
+        /// </summary>
+        /// <param name="g"></param>
         private void DrawBoxForPlayers(Graphics g)
         {
             int tablePicWidth = this.pictureBox_Table.Width;
@@ -108,7 +152,7 @@ namespace TexasPokerCaculator
 
         private void pictureBox_Table_Paint(object sender, PaintEventArgs e)
         {
-            DrawBoxForPlayers(e.Graphics);
+            DrawPokerPools(e.Graphics);
         }
 
         private void pictureBox_PokerStack_MouseMove(object sender, MouseEventArgs e)

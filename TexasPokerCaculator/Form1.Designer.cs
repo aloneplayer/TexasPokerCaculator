@@ -48,7 +48,7 @@
             this.panel_Control.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_Control.Location = new System.Drawing.Point(0, 0);
             this.panel_Control.Name = "panel_Control";
-            this.panel_Control.Size = new System.Drawing.Size(255, 440);
+            this.panel_Control.Size = new System.Drawing.Size(255, 556);
             this.panel_Control.TabIndex = 2;
             // 
             // label_PokerName
@@ -77,7 +77,7 @@
             this.panel_Table.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Table.Location = new System.Drawing.Point(255, 0);
             this.panel_Table.Name = "panel_Table";
-            this.panel_Table.Size = new System.Drawing.Size(677, 440);
+            this.panel_Table.Size = new System.Drawing.Size(677, 556);
             this.panel_Table.TabIndex = 3;
             // 
             // pictureBox_Table
@@ -87,7 +87,7 @@
             this.pictureBox_Table.Location = new System.Drawing.Point(0, 0);
             this.pictureBox_Table.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox_Table.Name = "pictureBox_Table";
-            this.pictureBox_Table.Size = new System.Drawing.Size(677, 440);
+            this.pictureBox_Table.Size = new System.Drawing.Size(677, 556);
             this.pictureBox_Table.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_Table.TabIndex = 2;
             this.pictureBox_Table.TabStop = false;
@@ -97,9 +97,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(932, 440);
+            this.ClientSize = new System.Drawing.Size(932, 556);
             this.Controls.Add(this.panel_Table);
             this.Controls.Add(this.panel_Control);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Form1";
             this.Text = "TexasPoker Caculator";
             this.Load += new System.EventHandler(this.Form1_Load);
