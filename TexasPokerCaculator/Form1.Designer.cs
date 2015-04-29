@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel_Control = new System.Windows.Forms.Panel();
+            this.label_PokerName = new System.Windows.Forms.Label();
             this.pictureBox_PokerStack = new System.Windows.Forms.PictureBox();
             this.panel_Table = new System.Windows.Forms.Panel();
             this.pictureBox_Table = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel_Control.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_PokerStack)).BeginInit();
             this.panel_Table.SuspendLayout();
@@ -41,7 +43,7 @@
             // 
             // panel_Control
             // 
-            this.panel_Control.Controls.Add(this.label1);
+            this.panel_Control.Controls.Add(this.label_PokerName);
             this.panel_Control.Controls.Add(this.pictureBox_PokerStack);
             this.panel_Control.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_Control.Location = new System.Drawing.Point(0, 0);
@@ -49,16 +51,25 @@
             this.panel_Control.Size = new System.Drawing.Size(255, 440);
             this.panel_Control.TabIndex = 2;
             // 
+            // label_PokerName
+            // 
+            this.label_PokerName.AutoSize = true;
+            this.label_PokerName.Location = new System.Drawing.Point(12, 167);
+            this.label_PokerName.Name = "label_PokerName";
+            this.label_PokerName.Size = new System.Drawing.Size(35, 13);
+            this.label_PokerName.TabIndex = 5;
+            this.label_PokerName.Text = "label1";
+            // 
             // pictureBox_PokerStack
             // 
-            this.pictureBox_PokerStack.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox_PokerStack.Image = global::TexasPokerCaculator.Properties.Resources.SmallPokers;
             this.pictureBox_PokerStack.Location = new System.Drawing.Point(0, 0);
             this.pictureBox_PokerStack.Name = "pictureBox_PokerStack";
-            this.pictureBox_PokerStack.Size = new System.Drawing.Size(255, 440);
+            this.pictureBox_PokerStack.Size = new System.Drawing.Size(252, 150);
             this.pictureBox_PokerStack.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox_PokerStack.TabIndex = 4;
             this.pictureBox_PokerStack.TabStop = false;
+            this.pictureBox_PokerStack.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_PokerStack_MouseMove);
             // 
             // panel_Table
             // 
@@ -81,15 +92,6 @@
             this.pictureBox_Table.TabIndex = 2;
             this.pictureBox_Table.TabStop = false;
             this.pictureBox_Table.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Table_Paint);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 167);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "label1";
             // 
             // Form1
             // 
@@ -117,7 +119,8 @@
         private System.Windows.Forms.PictureBox pictureBox_PokerStack;
         private System.Windows.Forms.Panel panel_Table;
         private System.Windows.Forms.PictureBox pictureBox_Table;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label_PokerName;
+        private System.Windows.Forms.ToolTip toolTip1;
 
 
     }

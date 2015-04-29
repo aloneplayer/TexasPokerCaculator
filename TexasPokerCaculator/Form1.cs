@@ -23,10 +23,10 @@ namespace TexasPokerCaculator
         private Rectangle rect_Player9;
         private Rectangle rect_Player10;
 
-        private const int SmallPokerWidth = 17;
+        private const int SmallPokerWidth = 19;
         private const int SmallPokerHeight = 36;
-        private const int SmallPokerPicTopMargin = 4;
-        private const int SmallPokerPicLeftMargin = 4;
+        private const int SmallPokerPicTopMargin = 3;
+        private const int SmallPokerPicLeftMargin = 2;
 
         public Form1()
         {
@@ -62,13 +62,13 @@ namespace TexasPokerCaculator
             //Draw top row boxes
             rect_Player2 = new Rectangle(leftMargin, topMargin, boxWidth, boxHeight);
             g.DrawRectangle(Pens.Red, rect_Player2);
-            
+
             rect_Player3 = new Rectangle(leftMargin + boxWidth + boxHorizontalGap, topMargin, boxWidth, boxHeight);
             g.DrawRectangle(Pens.Red, rect_Player3);
-            
+
             rect_Player4 = new Rectangle(leftMargin + 2 * boxWidth + 2 * boxHorizontalGap, topMargin, boxWidth, boxHeight);
             g.DrawRectangle(Pens.Red, rect_Player4);
-            
+
             rect_Player5 = new Rectangle(leftMargin + 3 * boxWidth + 3 * boxHorizontalGap, topMargin, boxWidth, boxHeight);
             g.DrawRectangle(Pens.Red, rect_Player5);
 
@@ -100,8 +100,8 @@ namespace TexasPokerCaculator
         }
 
         private void DrawPokerStackHighlightBox()
-        { 
-        
+        {
+
         }
         #endregion
 
@@ -113,12 +113,41 @@ namespace TexasPokerCaculator
 
         private void pictureBox_PokerStack_MouseMove(object sender, MouseEventArgs e)
         {
+            int x = e.X;
+            int y = e.Y;
 
+            int xPokerIndex = (x - SmallPokerPicLeftMargin) / SmallPokerWidth;
+            int yPokerIndex = (y - SmallPokerPicTopMargin) / SmallPokerHeight;
+
+            if (xPokerIndex < 13 && yPokerIndex < 4)
+            {
+                ShowPokerName(xPokerIndex, yPokerIndex);
+
+                //For debug
+                //String tipText = String.Format("({0}, {1})", xPokerIndex, yPokerIndex);
+                //this.toolTip1.Show(tipText, this, e.Location);
+
+                // +xPokerIndex is the widths of the black line between poker
+                int xBox = SmallPokerPicLeftMargin + xPokerIndex * SmallPokerWidth - 1;
+                int yBox = SmallPokerPicTopMargin + yPokerIndex * SmallPokerHeight - 1;
+
+                this.pictureBox_PokerStack.Refresh();
+                Graphics g = this.pictureBox_PokerStack.CreateGraphics();
+                g.DrawRectangle(new Pen(Color.Blue, 2), xBox, yBox, SmallPokerWidth + 1, SmallPokerHeight + 1);
+            }
         }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
 
+        }
+
+        private void ShowPokerName(int xIndex, int yIndex)
+        {
+            string pokerType = Poker.PokerTypes[yIndex];
+            string pokerPoint = Poker.PokerPoint[xIndex];
+
+            this.label_PokerName.Text = pokerType + pokerPoint;
         }
     }
 }
