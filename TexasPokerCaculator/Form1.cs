@@ -28,14 +28,39 @@ namespace TexasPokerCaculator
         private const int SmallPokerPicTopMargin = 3;
         private const int SmallPokerPicLeftMargin = 2;
 
+        public static Dictionary<int, string> PokerTypesForPokerStack;
+        public static Dictionary<int, string> PokerPointForPokerStack;
+
         public Form1()
         {
             InitializeComponent();
         }
-
+        static Form1()
+        { 
+        
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
+            PokerTypesForPokerStack = new Dictionary<int, string>();
+            PokerTypesForPokerStack.Add(0, "红桃");
+            PokerTypesForPokerStack.Add(1, "黑桃");
+            PokerTypesForPokerStack.Add(2, "方块");
+            PokerTypesForPokerStack.Add(3, "梅花");
 
+            PokerPointForPokerStack = new Dictionary<int, string>();
+            PokerPointForPokerStack.Add(0, "2");
+            PokerPointForPokerStack.Add(1, "3");
+            PokerPointForPokerStack.Add(2, "4");
+            PokerPointForPokerStack.Add(3, "5");
+            PokerPointForPokerStack.Add(4, "6");
+            PokerPointForPokerStack.Add(5, "7");
+            PokerPointForPokerStack.Add(6, "8");
+            PokerPointForPokerStack.Add(7, "9");
+            PokerPointForPokerStack.Add(8, "10");
+            PokerPointForPokerStack.Add(9, "J");
+            PokerPointForPokerStack.Add(10, "Q");
+            PokerPointForPokerStack.Add(11, "K");
+            PokerPointForPokerStack.Add(12, "A");
         }
 
 
@@ -188,10 +213,122 @@ namespace TexasPokerCaculator
 
         private void ShowPokerName(int xIndex, int yIndex)
         {
-            string pokerType = Poker.PokerTypes[yIndex];
-            string pokerPoint = Poker.PokerPoint[xIndex];
+            string pokerType = PokerTypesForPokerStack[yIndex];
+            string pokerPoint = PokerPointForPokerStack[xIndex];
 
             this.label_PokerName.Text = pokerType + pokerPoint;
+        }
+
+        private void DrawPokerCard(Graphics g, Poker.PokerSuits pokerSuit, int pokerPoint, Point location)
+        { 
+            // Details the all-in-one image
+            // maginLeft =1
+            // margin top =1
+            // gap between cars =1
+            // card width =71
+            // card Height = 95
+
+            int colIndex = GetPokerColumnIndexInBigImage(pokerPoint);
+            int rowIndex = GetPokerRowIndexInBigImage(pokerSuit);
+        
+        }
+
+        /// <summary>
+        /// Return the row index of the poker in the All-in-one poker image
+        /// The poker order in the All-in-one poker image is
+        ///  Clubs = 0,
+        //   Diamonds,
+        //   Hearts,
+        //   Spades
+        /// </summary>
+        private int GetPokerRowIndexInBigImage(Poker.PokerSuits pokerSuit)
+        {
+            if (pokerSuit == Poker.PokerSuits.Clubs)
+            {
+                return 0;
+            }
+            else if (pokerSuit == Poker.PokerSuits.Spades)
+            {
+                return 1;
+            }
+            else if (pokerSuit == Poker.PokerSuits.Hearts)
+            {
+                return 2;
+            }
+            if (pokerSuit == Poker.PokerSuits.Diamonds)
+            {
+                return 3;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        /// <summary>
+        /// The poker order in the All-in-one poker image is
+        ///  A-2 --- K
+        ///  My poker order is 2---K A
+        /// </summary>
+        /// <param name="pokerPoint"></param>
+        /// <returns></returns>
+        private int GetPokerColumnIndexInBigImage(int pokerPoint)
+        {
+            if (pokerPoint == 12)
+                return 0;
+            else
+                return pokerPoint + 1;
+        }
+
+        private int ColumnInStackToPokerPoint(int xPokerIndex)
+        { 
+            return xPokerIndex;
+        }
+        /// <summary>
+        /// Order in poker suit image is
+        /// heart, Spade, Diamond, Club
+        /// </summary>
+        /// <param name="yPokerIndex"></param>
+        /// <returns></returns>
+        private Poker.PokerSuits RowInStackToPokerSuit(int yPokerIndex)
+        {
+            if (yPokerIndex == 0)
+            {
+                return Poker.PokerSuits.Hearts;
+            }
+            else if (yPokerIndex == 1)
+            {
+                return Poker.PokerSuits.Spades;
+            }
+            else if (yPokerIndex == 2)
+            {
+                return Poker.PokerSuits.Diamonds;
+            }
+            else if (yPokerIndex == 3)
+            {
+                return Poker.PokerSuits.Clubs;
+            }
+            else 
+            {
+                return Poker.PokerSuits.Unknown;
+            }
+        }
+
+        private void pictureBox_PokerStack_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int x = e.X;
+            int y = e.Y;
+
+            int xPokerIndex = (x - SmallPokerPicLeftMargin) / SmallPokerWidth;
+            int yPokerIndex = (y - SmallPokerPicTopMargin) / SmallPokerHeight;
+
+            if (xPokerIndex < 13 && yPokerIndex < 4)
+            {
+                int pokerPoint = ColumnInStackToPokerPoint(xPokerIndex);
+                Poker.PokerSuits pokerSuit = RowInStackToPokerSuit(yPokerIndex);
+
+                Graphics g = this.pictureBox_Table.CreateGraphics();
+                DrawPokerCard(g, pokerSuit, pokerPoint, new Point(0, 0));
+            }
         }
     }
 }
