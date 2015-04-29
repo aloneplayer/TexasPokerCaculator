@@ -28,8 +28,6 @@ namespace TexasPokerCaculator
         private const int SmallPokerPicTopMargin = 3;
         private const int SmallPokerPicLeftMargin = 2;
 
-        public static Dictionary<int, string> PokerTypesForPokerStack;
-        public static Dictionary<int, string> PokerPointForPokerStack;
         private const int CardWidth = 71;
         private const int CardHeight = 95;
         private Rectangle CommonPokerPoolRect;
@@ -45,26 +43,7 @@ namespace TexasPokerCaculator
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            PokerTypesForPokerStack = new Dictionary<int, string>();
-            PokerTypesForPokerStack.Add(0, "红桃");
-            PokerTypesForPokerStack.Add(1, "黑桃");
-            PokerTypesForPokerStack.Add(2, "方块");
-            PokerTypesForPokerStack.Add(3, "梅花");
-
-            PokerPointForPokerStack = new Dictionary<int, string>();
-            PokerPointForPokerStack.Add(0, "2");
-            PokerPointForPokerStack.Add(1, "3");
-            PokerPointForPokerStack.Add(2, "4");
-            PokerPointForPokerStack.Add(3, "5");
-            PokerPointForPokerStack.Add(4, "6");
-            PokerPointForPokerStack.Add(5, "7");
-            PokerPointForPokerStack.Add(6, "8");
-            PokerPointForPokerStack.Add(7, "9");
-            PokerPointForPokerStack.Add(8, "10");
-            PokerPointForPokerStack.Add(9, "J");
-            PokerPointForPokerStack.Add(10, "Q");
-            PokerPointForPokerStack.Add(11, "K");
-            PokerPointForPokerStack.Add(12, "A");
+            
         }
 
 
@@ -215,8 +194,8 @@ namespace TexasPokerCaculator
 
         private void ShowPokerName(int xIndex, int yIndex)
         {
-            string pokerType = PokerTypesForPokerStack[yIndex];
-            string pokerPoint = PokerPointForPokerStack[xIndex];
+            string pokerType = Poker.PokerSuitNameMapping[(Poker.PokerSuits)yIndex];
+            string pokerPoint = Poker.PokerPointNameMapping[xIndex];
 
             this.label_PokerName.Text = pokerType + pokerPoint;
         }
