@@ -215,8 +215,8 @@ namespace TexasPokerCaculator
             int cardWidth = 71;
             int cardHeight = 95;
             
-            int colIndex = GetPokerColumnIndexInBigImage(pokerPoint);
-            int rowIndex = GetPokerRowIndexInBigImage(pokerSuit);
+            int colIndex = pokerPoint;
+            int rowIndex = (int)pokerSuit;
 
             int x = marginLeft + colIndex * cardWidth + colIndex * gapX;
             int y = marginTop + rowIndex * cardHeight + rowIndex * gapY;
@@ -226,86 +226,6 @@ namespace TexasPokerCaculator
             Bitmap CroppedImage = source.Clone(section, source.PixelFormat);
             g.DrawImage(CroppedImage, location);
             source.Dispose();
-        }
-
-        /// <summary>
-        /// Return the row index of the poker in the All-in-one poker image
-        /// The poker order in the All-in-one poker image is
-        ///  Clubs = 0,
-        //   Diamonds,
-        //   Hearts,
-        //   Spades
-        /// </summary>
-        private int GetPokerRowIndexInBigImage(Poker.PokerSuits pokerSuit)
-        {
-            if (pokerSuit == Poker.PokerSuits.Clubs)
-            {
-                return 0;
-            }
-            else if (pokerSuit == Poker.PokerSuits.Spades)
-            {
-                return 1;
-            }
-            else if (pokerSuit == Poker.PokerSuits.Hearts)
-            {
-                return 2;
-            }
-            if (pokerSuit == Poker.PokerSuits.Diamonds)
-            {
-                return 3;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        /// <summary>
-        /// The poker order in the All-in-one poker image is
-        ///  A-2 --- K
-        ///  My poker order is 2---K A
-        /// </summary>
-        /// <param name="pokerPoint"></param>
-        /// <returns></returns>
-        private int GetPokerColumnIndexInBigImage(int pokerPoint)
-        {
-            if (pokerPoint == 12)
-                return 0;
-            else
-                return pokerPoint + 1;
-        }
-
-        private int ColumnInStackToPokerPoint(int xPokerIndex)
-        {
-            return xPokerIndex;
-        }
-        /// <summary>
-        /// Order in poker suit image is
-        /// heart, Spade, Diamond, Club
-        /// </summary>
-        /// <param name="yPokerIndex"></param>
-        /// <returns></returns>
-        private Poker.PokerSuits RowInStackToPokerSuit(int yPokerIndex)
-        {
-            if (yPokerIndex == 0)
-            {
-                return Poker.PokerSuits.Hearts;
-            }
-            else if (yPokerIndex == 1)
-            {
-                return Poker.PokerSuits.Spades;
-            }
-            else if (yPokerIndex == 2)
-            {
-                return Poker.PokerSuits.Diamonds;
-            }
-            else if (yPokerIndex == 3)
-            {
-                return Poker.PokerSuits.Clubs;
-            }
-            else
-            {
-                return Poker.PokerSuits.Unknown;
-            }
         }
 
         private void pictureBox_PokerStack_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -318,12 +238,9 @@ namespace TexasPokerCaculator
 
             if (xPokerIndex < 13 && yPokerIndex < 4)
             {
-                int pokerPoint = ColumnInStackToPokerPoint(xPokerIndex);
-                Poker.PokerSuits pokerSuit = RowInStackToPokerSuit(yPokerIndex);
-
                 Graphics g = this.pictureBox_Table.CreateGraphics();
-                DrawPokerCard(g, pokerSuit, pokerPoint, CommonPokerPoolRect.Location);
-                DrawPokerCard(g, pokerSuit, pokerPoint, DealerPokerPoolRect.Location);
+                DrawPokerCard(g, (Poker.PokerSuits)yPokerIndex, xPokerIndex, CommonPokerPoolRect.Location);
+                DrawPokerCard(g, (Poker.PokerSuits)yPokerIndex, xPokerIndex, DealerPokerPoolRect.Location);
             }
         }
     }
