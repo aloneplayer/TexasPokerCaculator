@@ -26,15 +26,24 @@ namespace TexasPokerCaculator
                 if (pokerSlots[i].IsEmpty)
                 {
                     pokerSlots[i].InsertPoker(suit, point);
-                    if (i == 4)
-                    { 
-                    
-                    }
                     break;
                 }
             }
         }
-
+        public void RemovePoker(Poker.PokerSuits suit, int point)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (pokerSlots[i].Poker != null)
+                {
+                    if (pokerSlots[i].Poker.Suit == suit && pokerSlots[i].Poker.Point == point)
+                    {
+                        pokerSlots[i].Clear();
+                        break;
+                    }
+                }
+            }
+        }
         public int Count
         {
             get { return this.count; }
@@ -42,13 +51,13 @@ namespace TexasPokerCaculator
 
         public bool IsFull
         {
-            get 
+            get
             {
                 for (int i = 0; i < count; i++)
                 {
                     if (pokerSlots[i].IsEmpty)
                     {
-                        return false; 
+                        return false;
                     }
                 }
                 return true;

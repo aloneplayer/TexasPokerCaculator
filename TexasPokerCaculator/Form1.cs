@@ -213,18 +213,17 @@ namespace TexasPokerCaculator
 
         private void DrawPokersInPokerStack()
         {
-            Graphics g = this.pictureBox_PokerStack.CreateGraphics();
-
-            this.pictureBox_PokerStack.Refresh();
-
+            Bitmap image = new Bitmap(this.pictureBox_PokerStack.ClientSize.Width,
+                                      this.pictureBox_PokerStack.ClientSize.Height);
+            Graphics g = Graphics.FromImage(image);
             for (int yIndex = 0; yIndex < 4; yIndex++)
             {
                 for (int xIndex = 0; xIndex < 13; xIndex++)
                 {
 
                     int pokerValue = Poker.GetValue(yIndex, xIndex);
-                    int xBox = SmallPokerPicLeftMargin + xIndex * SmallPokerWidth - 1;
-                    int yBox = SmallPokerPicTopMargin + yIndex * SmallPokerHeight - 1;
+                    int xBox = SmallPokerPicLeftMargin + xIndex * SmallPokerWidth;
+                    int yBox = SmallPokerPicTopMargin + yIndex * SmallPokerHeight;
 
                     if ((pokerStack[pokerValue] & PokerStack.PokerState.HighLight) == PokerStack.PokerState.HighLight)
                     {
@@ -239,11 +238,14 @@ namespace TexasPokerCaculator
                     }
                 }
             }
+            this.pictureBox_PokerStack.Image = image;
         }
 
         private void DrawCommonPokerPool(Rectangle poolRect)
         {
-            Graphics g = this.pictureBox_Table.CreateGraphics();
+            Bitmap image = new Bitmap(this.pictureBox_Table.ClientSize.Width,
+                                      this.pictureBox_Table.ClientSize.Height);
+            Graphics g = Graphics.FromImage(image);
             for (int i = 0; i < commonPokerPool.Count; i++)
             {
                 PokerSlot ps = commonPokerPool[i];
@@ -254,6 +256,7 @@ namespace TexasPokerCaculator
                     DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
                 }
             }
+            this.pictureBox_Table.Image = image;
         }
         private void DrawDealerPokerPool()
         {
@@ -278,9 +281,8 @@ namespace TexasPokerCaculator
                 //String tipText = String.Format("({0}, {1})", xPokerIndex, yPokerIndex);
                 //this.toolTip1.Show(tipText, this, e.Location);
                 this.pokerStack.HighLightPoker(yPokerIndex, xPokerIndex);
+                this.DrawPokersInPokerStack();
             }
-
-            this.DrawPokersInPokerStack();
         }
 
         private void pictureBox_PokerStack_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -307,6 +309,13 @@ namespace TexasPokerCaculator
                         this.pokerStack.TakePoker(pokerValue);
                         this.DrawPokersInPokerStack();
                     }
+                }
+                else
+                {
+                    this.commonPokerPool.RemovePoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
+                    DrawCommonPokerPool(CommonPokerPoolRect);
+                    this.pokerStack.PutBackPoker(pokerValue);
+                    this.DrawPokersInPokerStack();
                 }
             }
         }

@@ -62,7 +62,7 @@
             // 
             // pictureBox_PokerStack
             // 
-            this.pictureBox_PokerStack.Image = global::TexasPokerCaculator.Properties.Resources.SmallPokers;
+            this.pictureBox_PokerStack.BackgroundImage = global::TexasPokerCaculator.Properties.Resources.SmallPokers;
             this.pictureBox_PokerStack.Location = new System.Drawing.Point(0, 0);
             this.pictureBox_PokerStack.Name = "pictureBox_PokerStack";
             this.pictureBox_PokerStack.Size = new System.Drawing.Size(252, 150);
@@ -84,8 +84,9 @@
             // 
             // pictureBox_Table
             // 
+            this.pictureBox_Table.BackgroundImage = global::TexasPokerCaculator.Properties.Resources.PokerTable;
+            this.pictureBox_Table.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox_Table.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox_Table.Image = global::TexasPokerCaculator.Properties.Resources.PokerTable;
             this.pictureBox_Table.Location = new System.Drawing.Point(0, 0);
             this.pictureBox_Table.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox_Table.Name = "pictureBox_Table";

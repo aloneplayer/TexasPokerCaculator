@@ -18,17 +18,22 @@ namespace TexasPokerCaculator
 
         public bool IsEmpty
         {
-            get {return this.poker == null;}
+            get { return this.poker == null; }
         }
 
         public Poker Poker
         {
-            get {return poker;}
+            get { return poker; }
         }
 
         public void InsertPoker(Poker.PokerSuits suit, int point)
         {
             this.poker = new Poker(suit, point);
+        }
+
+        public void Clear()
+        {
+            this.poker = null;
         }
     }
 
