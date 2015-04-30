@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="Poker.cs" />
     <Compile Include="PokerPool.cs" />
+    <Compile Include="PokerSlot.cs" />
     <Compile Include="PokerStack.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

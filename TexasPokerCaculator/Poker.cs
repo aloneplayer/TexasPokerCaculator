@@ -22,7 +22,7 @@ namespace TexasPokerCaculator
         }
         public static Dictionary<PokerSuits, string> PokerSuitNameMapping;
         public static Dictionary<int, string> PokerPointNameMapping;
-       
+
         private int value;
 
         static Poker()
@@ -55,14 +55,14 @@ namespace TexasPokerCaculator
 
         public Poker(PokerSuits suit, int point)
         {
-            this.value = 12 * (int)suit + point;
+            this.value = Poker.GetValue((int)suit, point);
         }
 
         public PokerSuits Suit
         {
-            get 
-            { 
-                return (PokerSuits)(this.value / 13); 
+            get
+            {
+                return (PokerSuits)(this.value / 13);
             }
         }
 
@@ -76,6 +76,11 @@ namespace TexasPokerCaculator
         public override string ToString()
         {
             return PokerSuitNameMapping[this.Suit] + PokerPointNameMapping[this.Point];
+        }
+
+        public static int GetValue(int suit, int point)
+        {
+            return 13 * (int)suit + point;
         }
     }
 }

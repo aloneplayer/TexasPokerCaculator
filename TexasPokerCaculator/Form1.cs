@@ -30,8 +30,17 @@ namespace TexasPokerCaculator
 
         private const int CardWidth = 71;
         private const int CardHeight = 95;
+        private const int CardGap = 10;
+
         private Rectangle CommonPokerPoolRect;
-        private Rectangle DealerPokerPoolRect; 
+        private Rectangle DealerPokerPoolRect;
+
+        /// <summary>
+        /// System Data  
+        /// </summary>
+        private PokerPool commonPokerPool = new PokerPool(5);
+        private PokerPool dealerPokerPool = new PokerPool(2);
+        private PokerStack pokerStack = new PokerStack();
 
         public Form1()
         {
@@ -43,7 +52,7 @@ namespace TexasPokerCaculator
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
 
 
@@ -161,6 +170,98 @@ namespace TexasPokerCaculator
             DrawPokerPools(e.Graphics);
         }
 
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ShowPokerName(int xIndex, int yIndex)
+        {
+            string pokerType = Poker.PokerSuitNameMapping[(Poker.PokerSuits)yIndex];
+            string pokerPoint = Poker.PokerPointNameMapping[xIndex];
+
+            this.label_PokerName.Text = pokerType + pokerPoint;
+        }
+
+        private void DrawPokerCard(Graphics g, Poker.PokerSuits pokerSuit, int pokerPoint, int x, int y)
+        {
+            // Details the all-in-one image
+            // marginLeft =1
+            // margin top =1
+            // gap between cars =1
+            // card width =71
+            // card Height = 95
+            int marginLeft = 1;
+            int marginTop = 1;
+            int gapX = 2;
+            int gapY = 3;
+            int cardWidth = 71;
+            int cardHeight = 95;
+
+            int colIndex = pokerPoint;
+            int rowIndex = (int)pokerSuit;
+
+            int xCard = marginLeft + colIndex * cardWidth + colIndex * gapX;
+            int yCard = marginTop + rowIndex * cardHeight + rowIndex * gapY;
+
+            Bitmap source = new Bitmap(TexasPokerCaculator.Properties.Resources.PokerCards);
+            Rectangle section = new Rectangle(xCard, yCard, cardWidth, cardHeight);
+            Bitmap CroppedImage = source.Clone(section, source.PixelFormat);
+            g.DrawImage(CroppedImage, x, y);
+            source.Dispose();
+        }
+
+        private void DrawPokersInPokerStack()
+        {
+            Graphics g = this.pictureBox_PokerStack.CreateGraphics();
+
+            this.pictureBox_PokerStack.Refresh();
+
+            for (int yIndex = 0; yIndex < 4; yIndex++)
+            {
+                for (int xIndex = 0; xIndex < 13; xIndex++)
+                {
+
+                    int pokerValue = Poker.GetValue(yIndex, xIndex);
+                    int xBox = SmallPokerPicLeftMargin + xIndex * SmallPokerWidth - 1;
+                    int yBox = SmallPokerPicTopMargin + yIndex * SmallPokerHeight - 1;
+
+                    if ((pokerStack[pokerValue] & PokerStack.PokerState.HighLight) == PokerStack.PokerState.HighLight)
+                    {
+                        //Draw highligh
+                        g.DrawRectangle(new Pen(Color.Blue, 2), xBox, yBox, SmallPokerWidth + 1, SmallPokerHeight + 1);
+                    }
+                    if ((pokerStack[pokerValue] & PokerStack.PokerState.OutStack) == PokerStack.PokerState.OutStack)
+                    {
+                        //Draw mask
+                        g.DrawLine(new Pen(Color.Blue, 2), xBox, yBox, xBox + SmallPokerWidth + 1, yBox + SmallPokerHeight);
+                        g.DrawLine(new Pen(Color.Blue, 2), xBox, yBox + SmallPokerHeight, xBox + SmallPokerWidth + 1, yBox);
+                    }
+                }
+            }
+        }
+
+        private void DrawCommonPokerPool(Rectangle poolRect)
+        {
+            Graphics g = this.pictureBox_Table.CreateGraphics();
+            for (int i = 0; i < commonPokerPool.Count; i++)
+            {
+                PokerSlot ps = commonPokerPool[i];
+                if (!ps.IsEmpty)
+                {
+                    int x = poolRect.X + (CardWidth + CardGap) * i;
+                    int y = poolRect.Y;
+                    DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
+                }
+            }
+        }
+        private void DrawDealerPokerPool()
+        {
+
+        }
+
+        #region  Event handler for poker stack
+
         private void pictureBox_PokerStack_MouseMove(object sender, MouseEventArgs e)
         {
             int x = e.X;
@@ -176,56 +277,10 @@ namespace TexasPokerCaculator
                 //For debug
                 //String tipText = String.Format("({0}, {1})", xPokerIndex, yPokerIndex);
                 //this.toolTip1.Show(tipText, this, e.Location);
-
-                // +xPokerIndex is the widths of the black line between poker
-                int xBox = SmallPokerPicLeftMargin + xPokerIndex * SmallPokerWidth - 1;
-                int yBox = SmallPokerPicTopMargin + yPokerIndex * SmallPokerHeight - 1;
-
-                this.pictureBox_PokerStack.Refresh();
-                Graphics g = this.pictureBox_PokerStack.CreateGraphics();
-                g.DrawRectangle(new Pen(Color.Blue, 2), xBox, yBox, SmallPokerWidth + 1, SmallPokerHeight + 1);
+                this.pokerStack.HighLightPoker(yPokerIndex, xPokerIndex);
             }
-        }
 
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ShowPokerName(int xIndex, int yIndex)
-        {
-            string pokerType = Poker.PokerSuitNameMapping[(Poker.PokerSuits)yIndex];
-            string pokerPoint = Poker.PokerPointNameMapping[xIndex];
-
-            this.label_PokerName.Text = pokerType + pokerPoint;
-        }
-
-        private void DrawPokerCard(Graphics g, Poker.PokerSuits pokerSuit, int pokerPoint, Point location)
-        {
-            // Details the all-in-one image
-            // marginLeft =1
-            // margin top =1
-            // gap between cars =1
-            // card width =71
-            // card Height = 95
-            int marginLeft = 1;
-            int marginTop = 1;
-            int gapX = 2;
-            int gapY = 3;
-            int cardWidth = 71;
-            int cardHeight = 95;
-            
-            int colIndex = pokerPoint;
-            int rowIndex = (int)pokerSuit;
-
-            int x = marginLeft + colIndex * cardWidth + colIndex * gapX;
-            int y = marginTop + rowIndex * cardHeight + rowIndex * gapY;
-
-            Bitmap source = new Bitmap(TexasPokerCaculator.Properties.Resources.PokerCards);
-            Rectangle section = new Rectangle(x, y, cardWidth, cardHeight);
-            Bitmap CroppedImage = source.Clone(section, source.PixelFormat);
-            g.DrawImage(CroppedImage, location);
-            source.Dispose();
+            this.DrawPokersInPokerStack();
         }
 
         private void pictureBox_PokerStack_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -238,10 +293,30 @@ namespace TexasPokerCaculator
 
             if (xPokerIndex < 13 && yPokerIndex < 4)
             {
-                Graphics g = this.pictureBox_Table.CreateGraphics();
-                DrawPokerCard(g, (Poker.PokerSuits)yPokerIndex, xPokerIndex, CommonPokerPoolRect.Location);
-                DrawPokerCard(g, (Poker.PokerSuits)yPokerIndex, xPokerIndex, DealerPokerPoolRect.Location);
+                int pokerValue = Poker.GetValue(yPokerIndex, xPokerIndex);
+                if ((this.pokerStack[pokerValue] & PokerStack.PokerState.InStack) == PokerStack.PokerState.InStack)
+                {
+                    if (commonPokerPool.IsFull)
+                    {
+                        MessageBox.Show("Poker pool is full");
+                    }
+                    else
+                    {
+                        this.commonPokerPool.InsterPoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
+                        DrawCommonPokerPool(CommonPokerPoolRect);
+                        this.pokerStack.TakePoker(pokerValue);
+                        this.DrawPokersInPokerStack();
+                    }
+                }
             }
         }
+        private void pictureBox_PokerStack_MouseLeave(object sender, EventArgs e)
+        {
+            this.pokerStack.UnHighLightAll();
+            this.DrawPokersInPokerStack();
+        }
+        #endregion
+
+
     }
 }

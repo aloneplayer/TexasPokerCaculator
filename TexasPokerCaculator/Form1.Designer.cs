@@ -70,6 +70,7 @@
             this.pictureBox_PokerStack.TabIndex = 4;
             this.pictureBox_PokerStack.TabStop = false;
             this.pictureBox_PokerStack.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox_PokerStack_MouseDoubleClick);
+            this.pictureBox_PokerStack.MouseLeave += new System.EventHandler(this.pictureBox_PokerStack_MouseLeave);
             this.pictureBox_PokerStack.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_PokerStack_MouseMove);
             // 
             // panel_Table
