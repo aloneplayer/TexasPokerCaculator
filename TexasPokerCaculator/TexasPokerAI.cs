@@ -97,12 +97,17 @@ namespace TexasPokerCaculator
         /// </summary>
         private void SortPokersByPoints()
         {
-
+            pokers = pokers.OrderByDescending(x => x.Point).ToList<Poker>();    
         }
 
-        private void SortPokerBySuitAndPoint()
+        private void SortPokerBySuitThenPoint()
         {
+            pokers = pokers.OrderByDescending(x => x.Suit).ThenByDescending(x => x.Point).ToList<Poker>();    
+        }
 
+        private void SortPokerByPointThenSuit()
+        {
+            pokers = pokers.OrderByDescending(x => x.Point).ThenByDescending(x => x.Suit).ToList<Poker>();
         }
 
         public override string ToString()
