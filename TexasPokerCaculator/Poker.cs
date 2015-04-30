@@ -57,7 +57,13 @@ namespace TexasPokerCaculator
         {
             this.value = Poker.GetValue((int)suit, point);
         }
-
+        public int Value
+        {
+            get
+            {
+                return this.value;
+            }
+        }
         public PokerSuits Suit
         {
             get

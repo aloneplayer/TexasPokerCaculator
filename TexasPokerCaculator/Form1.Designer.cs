@@ -30,25 +30,27 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel_Control = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox_Dealer = new System.Windows.Forms.GroupBox();
+            this.pictureBox_BestPattern = new System.Windows.Forms.PictureBox();
+            this.label_PatternName = new System.Windows.Forms.Label();
+            this.label_CurrentBest = new System.Windows.Forms.Label();
+            this.button_Calculate = new System.Windows.Forms.Button();
             this.pictureBox_PokerStack = new System.Windows.Forms.PictureBox();
             this.panel_Table = new System.Windows.Forms.Panel();
             this.pictureBox_Table = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.button_Calculate = new System.Windows.Forms.Button();
-            this.groupBox_Dealer = new System.Windows.Forms.GroupBox();
-            this.label_Best = new System.Windows.Forms.Label();
-            this.label_PatternName = new System.Windows.Forms.Label();
-            this.pictureBox_BestPattern = new System.Windows.Forms.PictureBox();
             this.panel_Control.SuspendLayout();
+            this.groupBox_Dealer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BestPattern)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_PokerStack)).BeginInit();
             this.panel_Table.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Table)).BeginInit();
-            this.groupBox_Dealer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BestPattern)).BeginInit();
             this.SuspendLayout();
             // 
             // panel_Control
             // 
+            this.panel_Control.Controls.Add(this.groupBox1);
             this.panel_Control.Controls.Add(this.groupBox_Dealer);
             this.panel_Control.Controls.Add(this.button_Calculate);
             this.panel_Control.Controls.Add(this.pictureBox_PokerStack);
@@ -57,6 +59,62 @@
             this.panel_Control.Name = "panel_Control";
             this.panel_Control.Size = new System.Drawing.Size(255, 556);
             this.panel_Control.TabIndex = 2;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(13, 318);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(225, 226);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Others";
+            // 
+            // groupBox_Dealer
+            // 
+            this.groupBox_Dealer.Controls.Add(this.pictureBox_BestPattern);
+            this.groupBox_Dealer.Controls.Add(this.label_PatternName);
+            this.groupBox_Dealer.Controls.Add(this.label_CurrentBest);
+            this.groupBox_Dealer.Location = new System.Drawing.Point(12, 204);
+            this.groupBox_Dealer.Name = "groupBox_Dealer";
+            this.groupBox_Dealer.Size = new System.Drawing.Size(226, 94);
+            this.groupBox_Dealer.TabIndex = 6;
+            this.groupBox_Dealer.TabStop = false;
+            this.groupBox_Dealer.Text = "Dealer";
+            // 
+            // pictureBox_BestPattern
+            // 
+            this.pictureBox_BestPattern.Location = new System.Drawing.Point(10, 37);
+            this.pictureBox_BestPattern.Name = "pictureBox_BestPattern";
+            this.pictureBox_BestPattern.Size = new System.Drawing.Size(186, 36);
+            this.pictureBox_BestPattern.TabIndex = 2;
+            this.pictureBox_BestPattern.TabStop = false;
+            // 
+            // label_PatternName
+            // 
+            this.label_PatternName.AutoSize = true;
+            this.label_PatternName.Location = new System.Drawing.Point(39, 20);
+            this.label_PatternName.Name = "label_PatternName";
+            this.label_PatternName.Size = new System.Drawing.Size(0, 13);
+            this.label_PatternName.TabIndex = 1;
+            // 
+            // label_CurrentBest
+            // 
+            this.label_CurrentBest.AutoSize = true;
+            this.label_CurrentBest.Location = new System.Drawing.Point(7, 20);
+            this.label_CurrentBest.Name = "label_CurrentBest";
+            this.label_CurrentBest.Size = new System.Drawing.Size(75, 13);
+            this.label_CurrentBest.TabIndex = 0;
+            this.label_CurrentBest.Text = "Currently Best:";
+            // 
+            // button_Calculate
+            // 
+            this.button_Calculate.Location = new System.Drawing.Point(12, 165);
+            this.button_Calculate.Name = "button_Calculate";
+            this.button_Calculate.Size = new System.Drawing.Size(75, 23);
+            this.button_Calculate.TabIndex = 5;
+            this.button_Calculate.Text = "Calculate";
+            this.button_Calculate.UseVisualStyleBackColor = true;
+            this.button_Calculate.Click += new System.EventHandler(this.button_Calculate_Click);
             // 
             // pictureBox_PokerStack
             // 
@@ -94,52 +152,6 @@
             this.pictureBox_Table.TabStop = false;
             this.pictureBox_Table.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Table_Paint);
             // 
-            // button_Calculate
-            // 
-            this.button_Calculate.Location = new System.Drawing.Point(12, 165);
-            this.button_Calculate.Name = "button_Calculate";
-            this.button_Calculate.Size = new System.Drawing.Size(75, 23);
-            this.button_Calculate.TabIndex = 5;
-            this.button_Calculate.Text = "Calculate";
-            this.button_Calculate.UseVisualStyleBackColor = true;
-            // 
-            // groupBox_Dealer
-            // 
-            this.groupBox_Dealer.Controls.Add(this.pictureBox_BestPattern);
-            this.groupBox_Dealer.Controls.Add(this.label_PatternName);
-            this.groupBox_Dealer.Controls.Add(this.label_Best);
-            this.groupBox_Dealer.Location = new System.Drawing.Point(12, 204);
-            this.groupBox_Dealer.Name = "groupBox_Dealer";
-            this.groupBox_Dealer.Size = new System.Drawing.Size(226, 94);
-            this.groupBox_Dealer.TabIndex = 6;
-            this.groupBox_Dealer.TabStop = false;
-            this.groupBox_Dealer.Text = "Dealer";
-            // 
-            // label_Best
-            // 
-            this.label_Best.AutoSize = true;
-            this.label_Best.Location = new System.Drawing.Point(7, 20);
-            this.label_Best.Name = "label_Best";
-            this.label_Best.Size = new System.Drawing.Size(31, 13);
-            this.label_Best.TabIndex = 0;
-            this.label_Best.Text = "Best:";
-            // 
-            // label_PatternName
-            // 
-            this.label_PatternName.AutoSize = true;
-            this.label_PatternName.Location = new System.Drawing.Point(39, 20);
-            this.label_PatternName.Name = "label_PatternName";
-            this.label_PatternName.Size = new System.Drawing.Size(0, 13);
-            this.label_PatternName.TabIndex = 1;
-            // 
-            // pictureBox_BestPattern
-            // 
-            this.pictureBox_BestPattern.Location = new System.Drawing.Point(10, 37);
-            this.pictureBox_BestPattern.Name = "pictureBox_BestPattern";
-            this.pictureBox_BestPattern.Size = new System.Drawing.Size(186, 36);
-            this.pictureBox_BestPattern.TabIndex = 2;
-            this.pictureBox_BestPattern.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,12 +166,12 @@
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel_Control.ResumeLayout(false);
             this.panel_Control.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_PokerStack)).EndInit();
-            this.panel_Table.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Table)).EndInit();
             this.groupBox_Dealer.ResumeLayout(false);
             this.groupBox_Dealer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BestPattern)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_PokerStack)).EndInit();
+            this.panel_Table.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Table)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -173,9 +185,10 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button button_Calculate;
         private System.Windows.Forms.GroupBox groupBox_Dealer;
-        private System.Windows.Forms.Label label_Best;
+        private System.Windows.Forms.Label label_CurrentBest;
         private System.Windows.Forms.Label label_PatternName;
         private System.Windows.Forms.PictureBox pictureBox_BestPattern;
+        private System.Windows.Forms.GroupBox groupBox1;
 
 
     }
