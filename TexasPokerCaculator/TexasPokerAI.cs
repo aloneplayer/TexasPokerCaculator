@@ -67,13 +67,7 @@ namespace TexasPokerCaculator
             {
                 return new PokerHand(PokerHand.TexasPattern.FourOfAKind, p);
             }
-
-            p = FindFourOfAKind(this.pokersInPool);
-            if (p != null)
-            {
-                return new PokerHand(PokerHand.TexasPattern.FourOfAKind, p);
-            }
-
+       
             //3+2
             p = FindFullHouse(this.pokersInPool);
             if (p != null)
@@ -81,11 +75,25 @@ namespace TexasPokerCaculator
                 return new PokerHand(PokerHand.TexasPattern.FullHouse, p);
 
             }
+            // 2+2
+            p = FindTwoPair(this.pokersInPool);
+            if (p != null)
+            {
+                return new PokerHand(PokerHand.TexasPattern.TwoPairs, p);
+
+            }
+
             //3
             p = FindThreeOfAKind(this.pokersInPool);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.ThreeOfAKind, p);
+            }
+            // 1 pair
+            p = FindOnePair(this.pokersInPool);
+            if (p != null)
+            {
+                return new PokerHand(PokerHand.TexasPattern.OnePair, p);
             }
 
             p = this.SortPokersByPoint(this.pokersInPool);
@@ -133,7 +141,10 @@ namespace TexasPokerCaculator
             List<Poker> p = SortPokersByPoint(pokers);
             for (int i = 0; i < pokers.Count - 4; i++)
             {
-                if (p[i].Point == p[i + 4].Point + 4)
+                if (p[i].Point == p[i + 1].Point + 1 &&
+                    p[i].Point == p[i + 2].Point + 2 &&
+                    p[i].Point == p[i + 3].Point + 3 &&
+                    p[i].Point == p[i + 4].Point + 4)
                 {
                     return ClonePokers(p, i, i + 4);
                 }
@@ -163,7 +174,7 @@ namespace TexasPokerCaculator
         {
             List<Poker> p = SortPokersByPoint(pokers);
 
-            for (int i = 0; i < p.Count - 4; i++)
+            for (int i = 0; i < p.Count - 3; i++)
             {
                 if (p[i].Point == p[i + 3].Point)
                 {
@@ -176,7 +187,7 @@ namespace TexasPokerCaculator
         {
             List<Poker> p = SortPokersByPoint(pokers);
 
-            for (int i = 0; i < p.Count - 3; i++)
+            for (int i = 0; i < p.Count - 2; i++)
             {
                 if (p[i].Point == p[i + 2].Point)
                     return ClonePokers(p, i, i + 2);
@@ -191,18 +202,33 @@ namespace TexasPokerCaculator
         private List<Poker> FindFullHouse(List<Poker> pokers)
         {
             List<Poker> p = this.SortPokersByPoint(pokers);
-
-            for (int i = 0; i < p.Count - 3; i++)
+            List<Poker> p3Kind = FindThreeOfAKind(p);
+            if (p3Kind != null)
             {
-                if (p[i].Point == p[i + 2].Point)
+                List<Poker> pRest = RemovePokers(p, p3Kind);
+                List<Poker> pPair = FindOnePair(pRest);
+                if (pPair != null)
                 {
-
+                    pPair.AddRange(p3Kind);
+                    return pPair;
                 }
             }
             return null;
         }
         private List<Poker> FindTwoPair(List<Poker> pokers)
         {
+            List<Poker> p = this.SortPokersByPoint(pokers);
+            List<Poker> pPair = FindOnePair(p);
+            if (pPair != null)
+            {
+                List<Poker> pRest = RemovePokers(p, pPair);
+                List<Poker> pPair2 = FindThreeOfAKind(pRest);
+                if (pPair2 != null)
+                {
+                    pPair.AddRange(pPair2);
+                    return pPair;
+                }
+            }
             return null;
         }
 
@@ -210,7 +236,7 @@ namespace TexasPokerCaculator
         {
             List<Poker> p = this.SortPokersByPoint(pokers);
 
-            for (int i = 0; i < p.Count - 2; i++)
+            for (int i = 0; i < p.Count - 1; i++)
             {
                 if (pokers[i].Point == pokers[i + 1].Point)
                 {
@@ -243,15 +269,30 @@ namespace TexasPokerCaculator
             return pokers.OrderByDescending(x => x.Point).ThenByDescending(x => x.Suit).ToList<Poker>();
         }
 
-        private List<Poker> ClonePokers(List<Poker> pokersInPool, int start, int end)
+        private List<Poker> ClonePokers(List<Poker> pokers, int start, int end)
         {
             List<Poker> p = new List<Poker>();
             for (int i = start; i <= end; i++)
             {
-                p.Add(new Poker(pokersInPool[i].Suit, pokersInPool[i].Point));
+                p.Add(new Poker(pokers[i].Suit, pokers[i].Point));
             }
             return p;
         }
+
+        private List<Poker> RemovePokers(List<Poker> pokers, List<Poker> pokersInPattern)
+        {
+            List<Poker> result = ClonePokers(pokers, 0, pokers.Count - 1);
+            for (int i = result.Count - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < pokersInPattern.Count; j++)
+                {
+                    if (result[i].Value == pokersInPattern[j].Value)
+                        result.RemoveAt(i);
+                }
+            }
+            return result;
+        }
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
