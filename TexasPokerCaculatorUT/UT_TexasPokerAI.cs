@@ -64,7 +64,6 @@ namespace TexasPokerCaculatorUT
 
             string s = ai.ToString();
             Assert.AreEqual("方块Q-梅花10-黑桃8-黑桃7-红桃7-梅花5-黑桃2", s);
-
         }
 
 

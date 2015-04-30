@@ -1,4 +1,4 @@
-﻿#define UIDEBUG
+﻿//#define UIDEBUG
 
 using System;
 using System.Collections.Generic;
@@ -154,7 +154,7 @@ namespace TexasPokerCaculator
         #endregion
 
         private void pictureBox_Table_Paint(object sender, PaintEventArgs e)
-        {          
+        {
 #if UIDEBUG
             Graphics g = e.Graphics;
 
@@ -242,30 +242,33 @@ namespace TexasPokerCaculator
 
         private void DrawPokerTable()
         {
-            Bitmap image = new Bitmap(this.pictureBox_Table.ClientSize.Width,
-                                      this.pictureBox_Table.ClientSize.Height);
-            Graphics g = Graphics.FromImage(image);
-            for (int i = 0; i < commonPokerPool.Count; i++)
+            if (this.pictureBox_Table.ClientSize.Height > 0 && this.pictureBox_Table.ClientSize.Width > 0)
             {
-                PokerSlot ps = commonPokerPool[i];
-                if (!ps.IsEmpty)
+                Bitmap image = new Bitmap(this.pictureBox_Table.ClientSize.Width,
+                                          this.pictureBox_Table.ClientSize.Height);
+                Graphics g = Graphics.FromImage(image);
+                for (int i = 0; i < commonPokerPool.Count; i++)
                 {
-                    int x = CommonPokerPoolRect.X + (CardWidth + CardGap) * i;
-                    int y = CommonPokerPoolRect.Y;
-                    DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
+                    PokerSlot ps = commonPokerPool[i];
+                    if (!ps.IsEmpty)
+                    {
+                        int x = CommonPokerPoolRect.X + (CardWidth + CardGap) * i;
+                        int y = CommonPokerPoolRect.Y;
+                        DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
+                    }
                 }
-            }
-            for (int i = 0; i < dealerPokerPool.Count; i++)
-            {
-                PokerSlot ps = dealerPokerPool[i];
-                if (!ps.IsEmpty)
+                for (int i = 0; i < dealerPokerPool.Count; i++)
                 {
-                    int x = DealerPokerPoolRect.X + (CardWidth + CardGap) * i;
-                    int y = DealerPokerPoolRect.Y;
-                    DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
+                    PokerSlot ps = dealerPokerPool[i];
+                    if (!ps.IsEmpty)
+                    {
+                        int x = DealerPokerPoolRect.X + (CardWidth + CardGap) * i;
+                        int y = DealerPokerPoolRect.Y;
+                        DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
+                    }
                 }
+                this.pictureBox_Table.Image = image;
             }
-            this.pictureBox_Table.Image = image;
         }
 
         #region  Event handler for poker stack
@@ -358,12 +361,12 @@ namespace TexasPokerCaculator
         {
             TexasPokerAI pokerAI = new TexasPokerAI(commonPokerPool, dealerPokerPool);
 
-            TexasPokerAI.Pattern pattern = pokerAI.CalculatePattern();
+            PokerHand pokerHand= pokerAI.CalculatePattern();
 
-            this.label_CurrentBest.Text = TexasPokerAI.PatternNameMapping[pattern];
+            this.label_CurrentBest.Text = NameMapping.PatternNameMapping[pokerHand.Pattern];
         }
         #region Event Hander for the poker Table
- 
+
         #endregion
     }
 }
