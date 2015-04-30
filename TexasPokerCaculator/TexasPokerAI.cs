@@ -50,8 +50,8 @@ namespace TexasPokerCaculator
             pokers = new List<Poker>();
 
             for (int i = 0; i < commonPool.Count; i++)
-            { 
-                if(!commonPool[i].IsEmpty)
+            {
+                if (!commonPool[i].IsEmpty)
                 {
                     pokers.Add(new Poker(commonPool[i].Poker.Value));
                 }
@@ -92,14 +92,30 @@ namespace TexasPokerCaculator
             return Pattern.Unknown;
         }
 
+        /// <summary>
+        /// Sort poker by points Descending 
+        /// </summary>
         private void SortPokersByPoints()
-        { 
-        
+        {
+
         }
 
         private void SortPokerBySuitAndPoint()
-        { 
-        
+        {
+
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < this.pokers.Count; i++)
+            {
+                sb.Append(pokers[i].ToString());
+                if (i < this.pokers.Count - 1)
+                    sb.Append("-");
+            }
+
+            return sb.ToString();
         }
     }
 }
