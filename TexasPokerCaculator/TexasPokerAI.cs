@@ -34,7 +34,7 @@ namespace TexasPokerCaculator
                 }
             }
         }
-
+        
         public PokerHand CalculatePattern()
         {
             List<Poker> p = FindRoyalFlush(this.pokersInPool);
@@ -67,7 +67,7 @@ namespace TexasPokerCaculator
             {
                 return new PokerHand(PokerHand.TexasPattern.FourOfAKind, p);
             }
-       
+
             //3+2
             p = FindFullHouse(this.pokersInPool);
             if (p != null)
@@ -222,7 +222,7 @@ namespace TexasPokerCaculator
             if (pPair != null)
             {
                 List<Poker> pRest = RemovePokers(p, pPair);
-                List<Poker> pPair2 = FindThreeOfAKind(pRest);
+                List<Poker> pPair2 = FindOnePair(pRest);
                 if (pPair2 != null)
                 {
                     pPair.AddRange(pPair2);
@@ -238,7 +238,7 @@ namespace TexasPokerCaculator
 
             for (int i = 0; i < p.Count - 1; i++)
             {
-                if (pokers[i].Point == pokers[i + 1].Point)
+                if (p[i].Point == p[i + 1].Point)
                 {
                     return ClonePokers(p, i, i + 1);
                 }
@@ -282,24 +282,30 @@ namespace TexasPokerCaculator
         private List<Poker> RemovePokers(List<Poker> pokers, List<Poker> pokersInPattern)
         {
             List<Poker> result = ClonePokers(pokers, 0, pokers.Count - 1);
+
             for (int i = result.Count - 1; i >= 0; i--)
             {
                 for (int j = 0; j < pokersInPattern.Count; j++)
                 {
                     if (result[i].Value == pokersInPattern[j].Value)
+                    {
                         result.RemoveAt(i);
+                        break;  //If don't break, result[i] will be assess after removed
+                    }
                 }
             }
             return result;
+
+            //return pokers.Except(pokersInPattern).ToList();
         }
 
-        public override string ToString()
+        public static string DisplayPokers(List<Poker> pokers)
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < this.pokersInPool.Count; i++)
+            for (int i = 0; i < pokers.Count; i++)
             {
-                sb.Append(pokersInPool[i].ToString());
-                if (i < this.pokersInPool.Count - 1)
+                sb.Append(pokers[i].ToString());
+                if (i < pokers.Count - 1)
                     sb.Append("-");
             }
 

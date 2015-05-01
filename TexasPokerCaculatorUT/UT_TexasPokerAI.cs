@@ -1,17 +1,30 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TexasPokerCaculator;
+using System.Collections.Generic;
 
 namespace TexasPokerCaculatorUT
 {
     [TestClass]
     public class UT_TexasPokerAI
     {
-        TexasPokerAI ai; 
+        TexasPokerAI ai;
+        List<Poker> pokers;
 
         [TestInitialize()]
-        public void Initialize() 
+        public void Initialize()
         {
+            pokers = new List<Poker>
+            {
+                new Poker(Poker.PokerSuits.Clubs, 3),
+                new Poker(Poker.PokerSuits.Spades, 5),
+                new Poker(Poker.PokerSuits.Hearts, 5),
+                new Poker(Poker.PokerSuits.Diamonds, 10),
+                new Poker(Poker.PokerSuits.Spades, 0),
+                new Poker(Poker.PokerSuits.Clubs, 8),
+                new Poker(Poker.PokerSuits.Spades, 6),
+            };
+
             PokerPool commonPool = new PokerPool(5);
             commonPool.InsterPoker(Poker.PokerSuits.Clubs, 3);
             commonPool.InsterPoker(Poker.PokerSuits.Spades, 5);
@@ -28,30 +41,27 @@ namespace TexasPokerCaculatorUT
         }
 
         [TestCleanup()]
-        public void Cleanup() 
-        { 
+        public void Cleanup()
+        {
         }
 
         [TestMethod]
-        public void SortPokersByPoints_Test()
+        public void SortPokersByPoint_Test()
         {
             PrivateObject obj = new PrivateObject(ai);
-            var retVal = obj.Invoke("SortPokersByPoints");
-          
-            
-            string s = ai.ToString();
+            List<Poker> result = (List<Poker>)obj.Invoke("SortPokersByPoint", pokers);
+
+            string s = TexasPokerAI.DisplayPokers(result);
             Assert.AreEqual("方块Q-梅花10-黑桃8-黑桃7-红桃7-梅花5-黑桃2", s);
-   
+
         }
 
         [TestMethod]
         public void SortPokerBySuitThenPoint_Test()
         {
             PrivateObject obj = new PrivateObject(ai);
-            var retVal = obj.Invoke("SortPokerBySuitThenPoint");
-
-
-            string s = ai.ToString();
+            List<Poker> result = (List<Poker>)obj.Invoke("SortPokersBySuitThenPoint", pokers);
+            string s = TexasPokerAI.DisplayPokers(result);
             Assert.AreEqual("黑桃8-黑桃7-黑桃2-红桃7-方块Q-梅花10-梅花5", s);
 
         }
@@ -59,19 +69,44 @@ namespace TexasPokerCaculatorUT
         public void SortPokerByPointThenSuit_Test()
         {
             PrivateObject obj = new PrivateObject(ai);
-            var retVal = obj.Invoke("SortPokerByPointThenSuit");
-
-
-            string s = ai.ToString();
+            List<Poker> result = (List<Poker>)obj.Invoke("SortPokersByPointThenSuit", pokers);
+            string s = TexasPokerAI.DisplayPokers(result);
             Assert.AreEqual("方块Q-梅花10-黑桃8-黑桃7-红桃7-梅花5-黑桃2", s);
         }
 
 
         [TestMethod]
-        public void ToString_Test()
+        public void DisplayPokers_Test()
         {
-            string s = ai.ToString();
+            string s = TexasPokerAI.DisplayPokers(pokers);
             Assert.AreEqual("梅花5-黑桃7-红桃7-方块Q-黑桃2-梅花10-黑桃8", s);
+        }
+
+        [TestMethod]
+        public void RemovePokers_Test()
+        {
+            List<Poker> pokers = new List<Poker>
+            {
+                new Poker(Poker.PokerSuits.Diamonds, 10),
+                new Poker(Poker.PokerSuits.Hearts,11 ),
+                new Poker(Poker.PokerSuits.Diamonds,12 ),
+                new Poker(Poker.PokerSuits.Spades, 8),
+                new Poker(Poker.PokerSuits.Hearts, 8)
+             
+            };
+
+            List<Poker> pokers2 = new List<Poker>
+            {
+                new Poker(Poker.PokerSuits.Spades, 8),
+                new Poker(Poker.PokerSuits.Hearts, 8)
+            };
+
+
+            PrivateObject obj = new PrivateObject(ai);
+            List<Poker> result = (List<Poker>)obj.Invoke("RemovePokers", pokers, pokers2);
+
+            string s = TexasPokerAI.DisplayPokers(result);
+            Assert.AreEqual("方块Q-红桃K-方块A", s);
         }
     }
 }
