@@ -1,4 +1,4 @@
-﻿#define UIDEBUG
+﻿//#define UIDEBUG
 
 using System;
 using System.Collections.Generic;
@@ -196,7 +196,7 @@ namespace TexasPokerCaculator
             source.Dispose();
         }
 
-        private void DrawPokersInPokerStack()
+        private void DrawPokersStack()
         {
             Bitmap image = new Bitmap(this.pictureBox_PokerStack.ClientSize.Width,
                                       this.pictureBox_PokerStack.ClientSize.Height);
@@ -248,7 +248,7 @@ namespace TexasPokerCaculator
                     g.DrawRectangle(Pens.Red, holeCards.PokerRects[i]);
                 }
 #endif
-               
+
                 for (int i = 0; i < commonPokers.Count; i++)
                 {
                     PokerSlot ps = commonPokers[i];
@@ -283,7 +283,7 @@ namespace TexasPokerCaculator
                 //String tipText = String.Format("({0}, {1})", xPokerIndex, yPokerIndex);
                 //this.toolTip1.Show(tipText, this, e.Location);
                 this.pokerStack.HighLightPoker(yPokerIndex, xPokerIndex);
-                this.DrawPokersInPokerStack();
+                this.DrawPokersStack();
             }
         }
 
@@ -332,7 +332,7 @@ namespace TexasPokerCaculator
                     }
                     DrawPokerTable();
                     this.pokerStack.DealPoker(pokerValue);
-                    this.DrawPokersInPokerStack();
+                    this.DrawPokersStack();
 
                 }
                 else  // Pocker is out of stack, click on it will put pocker back
@@ -344,14 +344,14 @@ namespace TexasPokerCaculator
 
                     DrawPokerTable();
                     this.pokerStack.RecallPoker(pokerValue);
-                    this.DrawPokersInPokerStack();
+                    this.DrawPokersStack();
                 }
             }
         }
         private void pictureBox_PokerStack_MouseLeave(object sender, EventArgs e)
         {
             this.pokerStack.UnHighLightAll();
-            this.DrawPokersInPokerStack();
+            this.DrawPokersStack();
         }
         #endregion
 
@@ -364,6 +364,9 @@ namespace TexasPokerCaculator
             this.label_CurrentBest.Text = NameMapping.PatternNameMapping[pokerHand.Pattern];
         }
 
+
+
+        #region Event Hander for the poker Table
         private void pictureBox_Table_SizeChanged(object sender, EventArgs e)
         {
             this.SetupPokerRects();
@@ -371,9 +374,40 @@ namespace TexasPokerCaculator
             this.DrawPokerTable();
         }
 
-       
-        #region Event Hander for the poker Table
+        private void pictureBox_Table_Click(object sender, EventArgs e)
+        {
 
+        }
+        private void pictureBox_Table_MouseClick(object sender, MouseEventArgs e)
+        {
+            for (int i = 0; i < commonPokers.PokerRects.Count; i++)
+            {
+                if (commonPokers.PokerRects[i].Contains(e.X, e.Y))
+                {
+                    int pokerValue = commonPokers[i].Poker.Value;
+                    commonPokers.RemovePoker(commonPokers[i].Poker.Suit, commonPokers[i].Poker.Point);
+                    pokerStack.RecallPoker(pokerValue);
+                    this.DrawPokerTable();
+                    this.DrawPokersStack();
+                    return;
+                }
+            }
+
+            for (int i = 0; i < holeCards.PokerRects.Count; i++)
+            {
+                if (holeCards.PokerRects[i].Contains(e.X, e.Y))
+                {
+                    int pokerValue = holeCards[i].Poker.Value;
+                    holeCards.RemovePoker(holeCards[i].Poker.Suit, holeCards[i].Poker.Point);
+                    pokerStack.RecallPoker(pokerValue);
+                    this.DrawPokerTable();
+                    this.DrawPokersStack();
+                    break;
+                }
+            }
+        }
         #endregion
+
+
     }
 }
