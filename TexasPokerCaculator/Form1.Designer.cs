@@ -214,7 +214,6 @@
             this.pictureBox_Table.TabIndex = 2;
             this.pictureBox_Table.TabStop = false;
             this.pictureBox_Table.SizeChanged += new System.EventHandler(this.pictureBox_Table_SizeChanged);
-            this.pictureBox_Table.Click += new System.EventHandler(this.pictureBox_Table_Click);
             this.pictureBox_Table.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox_Table_MouseClick);
             // 
             // Form1

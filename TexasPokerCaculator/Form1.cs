@@ -373,11 +373,6 @@ namespace TexasPokerCaculator
             this.pictureBox_Table.Invalidate();
             this.DrawPokerTable();
         }
-
-        private void pictureBox_Table_Click(object sender, EventArgs e)
-        {
-
-        }
         private void pictureBox_Table_MouseClick(object sender, MouseEventArgs e)
         {
             for (int i = 0; i < commonPokers.PokerRects.Count; i++)
