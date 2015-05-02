@@ -15,7 +15,7 @@ namespace TexasPokerCaculator
             pokersInPool = new List<Poker>();
         }
 
-        public TexasPokerAI(PokerPool commonPool, PokerPool playerPool)
+        public TexasPokerAI(PokerGroup commonPool, PokerGroup playerPool)
         {
             pokersInPool = new List<Poker>();
 

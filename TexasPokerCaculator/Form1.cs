@@ -1,4 +1,4 @@
-﻿//#define UIDEBUG
+﻿#define UIDEBUG
 
 using System;
 using System.Collections.Generic;
@@ -34,14 +34,11 @@ namespace TexasPokerCaculator
         private const int CardHeight = 95;
         private const int CardGap = 10;
 
-        private Rectangle CommonPokerPoolRect;
-        private Rectangle DealerPokerPoolRect;
-
         /// <summary>
         /// System Data  
         /// </summary>
-        private PokerPool commonPokerPool = new PokerPool(5);
-        private PokerPool dealerPokerPool = new PokerPool(2);
+        private PokerGroup commonPokers = new PokerGroup(5);
+        private PokerGroup holeCards = new PokerGroup(2);
         private PokerStack pokerStack = new PokerStack();
 
         public Form1()
@@ -54,7 +51,8 @@ namespace TexasPokerCaculator
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.SetupPokerPoolBoxes();
+            this.SetupPokerRects();
+            this.DrawPokerTable();
         }
 
         #region UI functions
@@ -62,7 +60,7 @@ namespace TexasPokerCaculator
         /// Draw common poker pools and dealer poker pool
         /// </summary>
         /// <param name="g"></param>
-        private void SetupPokerPoolBoxes()
+        private void SetupPokerRects()
         {
             int tablePicWidth = this.pictureBox_Table.Width;
             int tablePicHeight = this.pictureBox_Table.Height;
@@ -75,18 +73,36 @@ namespace TexasPokerCaculator
 
             //int pokerGap = 10;
 
-            int pokerPoolWidth = CardWidth * 5 + CardGap * 4;
-            int pokerPoolHeight = CardHeight;
-            int pokerPoolLeft = leftMargin + (centralAreaWidth - pokerPoolWidth) / 2;
-            int pokerPoolTop = (int)(topMargin + (centralAreaHeight - pokerPoolHeight) / 2 - centralAreaHeight * 0.2);
-            CommonPokerPoolRect = new Rectangle(pokerPoolLeft, pokerPoolTop, pokerPoolWidth, pokerPoolHeight);
+            int commonPokersRectWidth = CardWidth * 5 + CardGap * (4 + 2);
+            int commonPokersRectHeight = CardHeight;
+            int commonPokersRectLeft = leftMargin + (centralAreaWidth - commonPokersRectWidth) / 2;
+            int commonPokersRectTop = (int)(topMargin + (centralAreaHeight - commonPokersRectHeight) / 2 - centralAreaHeight * 0.2);
+            commonPokers.OutlineRect = new Rectangle(commonPokersRectLeft, commonPokersRectTop, commonPokersRectWidth, commonPokersRectHeight);
+            commonPokers.PokerRects.Clear();
+            for (int i = 0; i < commonPokers.Count; i++)
+            {
+                int x = commonPokers.OutlineRect.X + (CardWidth + CardGap) * i;
+                int y = commonPokers.OutlineRect.Y;
+                if (i > 2)
+                {
+                    x += 2 * CardGap;
+                }
 
-            int dealerPokerPoolWidth = CardWidth * 2 + CardGap;
-            int dealerPokerPoolHeight = CardHeight;
-            int dealerPokeroolLeft = leftMargin + (centralAreaWidth - dealerPokerPoolWidth) / 2;
-            int dealerPokerPoolTop = topMargin + centralAreaHeight - pokerPoolHeight;
-            DealerPokerPoolRect = new Rectangle(dealerPokeroolLeft, dealerPokerPoolTop, dealerPokerPoolWidth, dealerPokerPoolHeight);
+                commonPokers.PokerRects.Add(new Rectangle(x, y, CardWidth, CardHeight));
+            }
 
+            int holeCardsRectWidth = CardWidth * 2 + CardGap;
+            int holeCardsRectHeight = CardHeight;
+            int holeCardsRectLeft = leftMargin + (centralAreaWidth - holeCardsRectWidth) / 2;
+            int holeCardsRectTop = topMargin + centralAreaHeight - commonPokersRectHeight;
+            holeCards.OutlineRect = new Rectangle(holeCardsRectLeft, holeCardsRectTop, holeCardsRectWidth, holeCardsRectHeight);
+            holeCards.PokerRects.Clear();
+            for (int i = 0; i < holeCards.Count; i++)
+            {
+                int x = holeCards.OutlineRect.X + (CardWidth + CardGap) * i;
+                int y = holeCards.OutlineRect.Y;
+                holeCards.PokerRects.Add(new Rectangle(x, y, CardWidth, CardHeight));
+            }
         }
         /// <summary>
         /// Obsolete
@@ -153,37 +169,7 @@ namespace TexasPokerCaculator
 
         #endregion
 
-        private void pictureBox_Table_Paint(object sender, PaintEventArgs e)
-        {
-#if UIDEBUG
-            Graphics g = e.Graphics;
-
-            g.DrawRectangle(Pens.Red, CommonPokerPoolRect);
-
-            int pokerPoolLeft = CommonPokerPoolRect.Left;
-            int pokerPoolTop = CommonPokerPoolRect.Top;
-            g.DrawRectangle(Pens.Red, pokerPoolLeft, pokerPoolTop, CardWidth, CardHeight);
-            g.DrawRectangle(Pens.Red, pokerPoolLeft + CardWidth + CardGap, pokerPoolTop, CardWidth, CardHeight);
-            g.DrawRectangle(Pens.Red, pokerPoolLeft + 2 * CardGap + 2 * CardWidth, pokerPoolTop, CardWidth, CardHeight);
-            g.DrawRectangle(Pens.Red, pokerPoolLeft + 3 * CardGap + 3 * CardWidth, pokerPoolTop, CardWidth, CardHeight);
-            g.DrawRectangle(Pens.Red, pokerPoolLeft + 4 * CardGap + 4 * CardWidth, pokerPoolTop, CardWidth, CardHeight);
-
-
-            g.DrawRectangle(Pens.Red, DealerPokerPoolRect);
-            pokerPoolLeft = DealerPokerPoolRect.Left;
-            pokerPoolTop = DealerPokerPoolRect.Top;
-            g.DrawRectangle(Pens.Red, pokerPoolLeft, pokerPoolTop, CardWidth, CardHeight);
-            g.DrawRectangle(Pens.Red, pokerPoolLeft + CardWidth + CardGap, pokerPoolTop, CardWidth, CardHeight);
-#endif
-        }
-
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            this.SetupPokerPoolBoxes();
-            this.DrawPokerTable();
-        }
-
-        private void DrawPokerCard(Graphics g, Poker.PokerSuits pokerSuit, int pokerPoint, int x, int y)
+        private void DrawPokerCard(Graphics g, Poker.PokerSuits pokerSuit, int pokerPoint, Rectangle rect)
         {
             // Details the all-in-one image
             // marginLeft =1
@@ -206,7 +192,7 @@ namespace TexasPokerCaculator
             //The section should be 1pix bigger than the pic I want to cut
             Rectangle section = new Rectangle(xCard, yCard, CardWidth + 1, CardHeight + 1);
             Bitmap CroppedImage = source.Clone(section, source.PixelFormat);
-            g.DrawImage(CroppedImage, x, y);
+            g.DrawImage(CroppedImage, rect.X, rect.Y);
             source.Dispose();
         }
 
@@ -245,26 +231,38 @@ namespace TexasPokerCaculator
             if (this.pictureBox_Table.ClientSize.Height > 0 && this.pictureBox_Table.ClientSize.Width > 0)
             {
                 Bitmap image = new Bitmap(this.pictureBox_Table.ClientSize.Width,
-                                          this.pictureBox_Table.ClientSize.Height);
+                                         this.pictureBox_Table.ClientSize.Height);
                 Graphics g = Graphics.FromImage(image);
-                for (int i = 0; i < commonPokerPool.Count; i++)
+#if UIDEBUG
+                g.DrawRectangle(Pens.Red, commonPokers.OutlineRect);
+
+                for (int i = 0; i < commonPokers.PokerRects.Count; i++)
                 {
-                    PokerSlot ps = commonPokerPool[i];
+                    g.DrawRectangle(Pens.Red, commonPokers.PokerRects[i]);
+                }
+
+
+                g.DrawRectangle(Pens.Red, holeCards.OutlineRect);
+                for (int i = 0; i < holeCards.PokerRects.Count; i++)
+                {
+                    g.DrawRectangle(Pens.Red, holeCards.PokerRects[i]);
+                }
+#endif
+               
+                for (int i = 0; i < commonPokers.Count; i++)
+                {
+                    PokerSlot ps = commonPokers[i];
                     if (!ps.IsEmpty)
                     {
-                        int x = CommonPokerPoolRect.X + (CardWidth + CardGap) * i;
-                        int y = CommonPokerPoolRect.Y;
-                        DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
+                        DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, commonPokers.PokerRects[i]);
                     }
                 }
-                for (int i = 0; i < dealerPokerPool.Count; i++)
+                for (int i = 0; i < holeCards.Count; i++)
                 {
-                    PokerSlot ps = dealerPokerPool[i];
+                    PokerSlot ps = holeCards[i];
                     if (!ps.IsEmpty)
                     {
-                        int x = DealerPokerPoolRect.X + (CardWidth + CardGap) * i;
-                        int y = DealerPokerPoolRect.Y;
-                        DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, x, y);
+                        DrawPokerCard(g, ps.Poker.Suit, ps.Poker.Point, holeCards.PokerRects[i]);
                     }
                 }
                 this.pictureBox_Table.Image = image;
@@ -309,7 +307,7 @@ namespace TexasPokerCaculator
                 {
                     if (pokerForDealer)
                     {
-                        if (dealerPokerPool.IsFull)
+                        if (holeCards.IsFull)
                         {
                             MessageBox.Show("deal pool is full");
                             return;
@@ -317,7 +315,7 @@ namespace TexasPokerCaculator
                     }
                     else
                     {
-                        if (commonPokerPool.IsFull)
+                        if (commonPokers.IsFull)
                         {
                             MessageBox.Show("Poker pool is full");
                             return;
@@ -326,26 +324,26 @@ namespace TexasPokerCaculator
 
                     if (pokerForDealer)
                     {
-                        this.dealerPokerPool.InsterPoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
+                        this.holeCards.InsterPoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
                     }
                     else
                     {
-                        this.commonPokerPool.InsterPoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
+                        this.commonPokers.InsterPoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
                     }
                     DrawPokerTable();
-                    this.pokerStack.TakePoker(pokerValue);
+                    this.pokerStack.DealPoker(pokerValue);
                     this.DrawPokersInPokerStack();
 
                 }
                 else  // Pocker is out of stack, click on it will put pocker back
                 {
 
-                    this.dealerPokerPool.RemovePoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
+                    this.holeCards.RemovePoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
 
-                    this.commonPokerPool.RemovePoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
+                    this.commonPokers.RemovePoker((Poker.PokerSuits)yPokerIndex, xPokerIndex);
 
                     DrawPokerTable();
-                    this.pokerStack.PutBackPoker(pokerValue);
+                    this.pokerStack.RecallPoker(pokerValue);
                     this.DrawPokersInPokerStack();
                 }
             }
@@ -359,12 +357,21 @@ namespace TexasPokerCaculator
 
         private void button_Calculate_Click(object sender, EventArgs e)
         {
-            TexasPokerAI pokerAI = new TexasPokerAI(commonPokerPool, dealerPokerPool);
+            TexasPokerAI pokerAI = new TexasPokerAI(commonPokers, holeCards);
 
-            PokerHand pokerHand= pokerAI.CalculatePattern();
+            PokerHand pokerHand = pokerAI.CalculatePattern();
 
             this.label_CurrentBest.Text = NameMapping.PatternNameMapping[pokerHand.Pattern];
         }
+
+        private void pictureBox_Table_SizeChanged(object sender, EventArgs e)
+        {
+            this.SetupPokerRects();
+            this.pictureBox_Table.Invalidate();
+            this.DrawPokerTable();
+        }
+
+       
         #region Event Hander for the poker Table
 
         #endregion

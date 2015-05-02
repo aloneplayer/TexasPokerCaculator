@@ -1,22 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TexasPokerCaculator
 {
-    public class PokerPool
+    public class PokerGroup
     {
+        private Rectangle outlineRect;
+        private List<Rectangle> pokerRects = new List<Rectangle>();
         private List<PokerSlot> pokerSlots = new List<PokerSlot>();
         private int count;
-        public PokerPool(int count)
+        public PokerGroup(int count)
         {
             this.count = count;
             for (int i = 0; i < count; i++)
             {
                 pokerSlots.Add(new PokerSlot());
             }
+        }
+
+        public Rectangle OutlineRect
+        {
+            get { return outlineRect; }
+            set { outlineRect = value; }
+        }
+
+        public List<Rectangle> PokerRects
+        {
+            get { return pokerRects; }
         }
 
         public void InsterPoker(Poker.PokerSuits suit, int point)

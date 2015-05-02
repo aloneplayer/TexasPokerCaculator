@@ -32,12 +32,12 @@ namespace TexasPokerCaculator
             }
         }
 
-        public void TakePoker(int value)
+        public void DealPoker(int value)
         {
             pokers[value] = PokerState.OutStack;
         }
 
-        public void PutBackPoker(int value)
+        public void RecallPoker(int value)
         {
             pokers[value] = PokerState.InStack;
         }

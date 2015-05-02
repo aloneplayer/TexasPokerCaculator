@@ -25,14 +25,14 @@ namespace TexasPokerCaculatorUT
                 new Poker(Poker.PokerSuits.Spades, 6),
             };
 
-            PokerPool commonPool = new PokerPool(5);
+            PokerGroup commonPool = new PokerGroup(5);
             commonPool.InsterPoker(Poker.PokerSuits.Clubs, 3);
             commonPool.InsterPoker(Poker.PokerSuits.Spades, 5);
             commonPool.InsterPoker(Poker.PokerSuits.Hearts, 5);
             commonPool.InsterPoker(Poker.PokerSuits.Diamonds, 10);
             commonPool.InsterPoker(Poker.PokerSuits.Spades, 0);
 
-            PokerPool playerPool = new PokerPool(2);
+            PokerGroup playerPool = new PokerGroup(2);
             playerPool.InsterPoker(Poker.PokerSuits.Clubs, 8);
             playerPool.InsterPoker(Poker.PokerSuits.Spades, 6);
 

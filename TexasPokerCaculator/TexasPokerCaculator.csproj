@@ -53,7 +53,7 @@
     <Compile Include="NameMapping.cs" />
     <Compile Include="Poker.cs" />
     <Compile Include="PokerHand.cs" />
-    <Compile Include="PokerPool.cs" />
+    <Compile Include="PokerGroup.cs" />
     <Compile Include="PokerSlot.cs" />
     <Compile Include="PokerStack.cs" />
     <Compile Include="Program.cs" />

@@ -30,6 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel_Control = new System.Windows.Forms.Panel();
+            this.textBox_PotOdds = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this._PotChips = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox_Dealer = new System.Windows.Forms.GroupBox();
             this.pictureBox_BestPattern = new System.Windows.Forms.PictureBox();
@@ -41,6 +47,8 @@
             this.pictureBox_Table = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel_Control.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._PotChips)).BeginInit();
             this.groupBox_Dealer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BestPattern)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_PokerStack)).BeginInit();
@@ -50,6 +58,12 @@
             // 
             // panel_Control
             // 
+            this.panel_Control.Controls.Add(this.textBox_PotOdds);
+            this.panel_Control.Controls.Add(this.label3);
+            this.panel_Control.Controls.Add(this.numericUpDown1);
+            this.panel_Control.Controls.Add(this.label2);
+            this.panel_Control.Controls.Add(this._PotChips);
+            this.panel_Control.Controls.Add(this.label1);
             this.panel_Control.Controls.Add(this.groupBox1);
             this.panel_Control.Controls.Add(this.groupBox_Dealer);
             this.panel_Control.Controls.Add(this.button_Calculate);
@@ -60,11 +74,60 @@
             this.panel_Control.Size = new System.Drawing.Size(255, 556);
             this.panel_Control.TabIndex = 2;
             // 
+            // textBox_PotOdds
+            // 
+            this.textBox_PotOdds.Location = new System.Drawing.Point(100, 247);
+            this.textBox_PotOdds.Name = "textBox_PotOdds";
+            this.textBox_PotOdds.ReadOnly = true;
+            this.textBox_PotOdds.Size = new System.Drawing.Size(100, 20);
+            this.textBox_PotOdds.TabIndex = 13;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 254);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(51, 13);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Pot Odds";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(100, 182);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 11;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 189);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Chips Follow";
+            // 
+            // _PotChips
+            // 
+            this._PotChips.Location = new System.Drawing.Point(100, 156);
+            this._PotChips.Name = "_PotChips";
+            this._PotChips.Size = new System.Drawing.Size(120, 20);
+            this._PotChips.TabIndex = 9;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 163);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Chips In Pot";
+            // 
             // groupBox1
             // 
-            this.groupBox1.Location = new System.Drawing.Point(13, 318);
+            this.groupBox1.Location = new System.Drawing.Point(13, 434);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(225, 226);
+            this.groupBox1.Size = new System.Drawing.Size(225, 110);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Others";
@@ -74,9 +137,9 @@
             this.groupBox_Dealer.Controls.Add(this.pictureBox_BestPattern);
             this.groupBox_Dealer.Controls.Add(this.label_PatternName);
             this.groupBox_Dealer.Controls.Add(this.label_CurrentBest);
-            this.groupBox_Dealer.Location = new System.Drawing.Point(12, 204);
+            this.groupBox_Dealer.Location = new System.Drawing.Point(15, 273);
             this.groupBox_Dealer.Name = "groupBox_Dealer";
-            this.groupBox_Dealer.Size = new System.Drawing.Size(226, 94);
+            this.groupBox_Dealer.Size = new System.Drawing.Size(226, 155);
             this.groupBox_Dealer.TabIndex = 6;
             this.groupBox_Dealer.TabStop = false;
             this.groupBox_Dealer.Text = "Dealer";
@@ -108,7 +171,7 @@
             // 
             // button_Calculate
             // 
-            this.button_Calculate.Location = new System.Drawing.Point(12, 165);
+            this.button_Calculate.Location = new System.Drawing.Point(12, 215);
             this.button_Calculate.Name = "button_Calculate";
             this.button_Calculate.Size = new System.Drawing.Size(75, 23);
             this.button_Calculate.TabIndex = 5;
@@ -150,7 +213,7 @@
             this.pictureBox_Table.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_Table.TabIndex = 2;
             this.pictureBox_Table.TabStop = false;
-            this.pictureBox_Table.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Table_Paint);
+            this.pictureBox_Table.SizeChanged += new System.EventHandler(this.pictureBox_Table_SizeChanged);
             // 
             // Form1
             // 
@@ -163,9 +226,10 @@
             this.Name = "Form1";
             this.Text = "TexasPoker Caculator";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel_Control.ResumeLayout(false);
             this.panel_Control.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._PotChips)).EndInit();
             this.groupBox_Dealer.ResumeLayout(false);
             this.groupBox_Dealer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BestPattern)).EndInit();
@@ -189,6 +253,12 @@
         private System.Windows.Forms.Label label_PatternName;
         private System.Windows.Forms.PictureBox pictureBox_BestPattern;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown _PotChips;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBox_PotOdds;
 
 
     }
