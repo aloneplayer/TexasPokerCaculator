@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -362,6 +363,14 @@ namespace TexasPokerCaculator
             PokerHand pokerHand = pokerAI.CalculatePattern();
 
             this.label_CurrentBest.Text = NameMapping.PatternNameMapping[pokerHand.Pattern];
+
+            List<Poker> currnetPokers = pokerAI.CurentPokers;
+            int currentPokerCount = currnetPokers.Count;
+
+            List<PokerHand> pridectHands = pokerAI.PridectRoyalFlush1(currnetPokers);
+
+            float probobility = (float)pridectHands.Count / (52 - currentPokerCount);
+            Debug.WriteLine(probobility, "P");
         }
 
 

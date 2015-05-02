@@ -25,13 +25,9 @@ namespace TexasPokerCaculator
         private TexasPattern pattern;
         private List<Poker> pokers;
 
-        public PokerHand(TexasPattern pattern, List<Poker> pokersInPool)
+        public PokerHand(TexasPattern pattern, List<Poker> pokers)
         {
-            pokers = new List<Poker>();
-            for (int i = 0; i < pokersInPool.Count; i++)
-            {
-                pokers.Add(new Poker(pokersInPool[i].Suit, pokersInPool[i].Point));
-            }
+            this.pokers = pokers;
             this.pattern = pattern;
         }
 
@@ -47,6 +43,5 @@ namespace TexasPokerCaculator
         {
             get { return this.pattern; }
         }
-
     }
 }

@@ -8,75 +8,78 @@ namespace TexasPokerCaculator
 {
     public class TexasPokerAI
     {
-        private List<Poker> pokersInPool;
+        private List<Poker> currentPokers;
 
         public TexasPokerAI()
         {
-            pokersInPool = new List<Poker>();
+            currentPokers = new List<Poker>();
         }
 
         public TexasPokerAI(PokerGroup commonPool, PokerGroup playerPool)
         {
-            pokersInPool = new List<Poker>();
+            currentPokers = new List<Poker>();
 
             for (int i = 0; i < commonPool.Count; i++)
             {
                 if (!commonPool[i].IsEmpty)
                 {
-                    pokersInPool.Add(new Poker(commonPool[i].Poker.Value));
+                    currentPokers.Add(new Poker(commonPool[i].Poker.Value));
                 }
             }
             for (int i = 0; i < playerPool.Count; i++)
             {
                 if (!playerPool[i].IsEmpty)
                 {
-                    pokersInPool.Add(new Poker(playerPool[i].Poker.Value));
+                    currentPokers.Add(new Poker(playerPool[i].Poker.Value));
                 }
             }
         }
-        
+        public List<Poker> CurentPokers
+        {
+            get { return this.currentPokers; }
+        }
         public PokerHand CalculatePattern()
         {
-            List<Poker> p = FindRoyalFlush(this.pokersInPool);
+            List<Poker> p = FindRoyalFlush(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.RoyalFlush, p);
             }
 
-            p = FindStraightFlush(this.pokersInPool);
+            p = FindStraightFlush(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.StraightFlush, p);
             }
 
-            p = FindStraight(this.pokersInPool);
+            p = FindStraight(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.Straight, p);
             }
 
-            p = FindFlush(this.pokersInPool);
+            p = FindFlush(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.Flush, p);
             }
 
             // 4
-            p = FindFourOfAKind(this.pokersInPool);
+            p = FindFourOfAKind(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.FourOfAKind, p);
             }
 
             //3+2
-            p = FindFullHouse(this.pokersInPool);
+            p = FindFullHouse(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.FullHouse, p);
 
             }
             // 2+2
-            p = FindTwoPair(this.pokersInPool);
+            p = FindTwoPair(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.TwoPairs, p);
@@ -84,19 +87,19 @@ namespace TexasPokerCaculator
             }
 
             //3
-            p = FindThreeOfAKind(this.pokersInPool);
+            p = FindThreeOfAKind(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.ThreeOfAKind, p);
             }
             // 1 pair
-            p = FindOnePair(this.pokersInPool);
+            p = FindOnePair(this.currentPokers);
             if (p != null)
             {
                 return new PokerHand(PokerHand.TexasPattern.OnePair, p);
             }
 
-            p = this.SortPokersByPoint(this.pokersInPool);
+            p = this.SortPokersByPoint(this.currentPokers);
             return new PokerHand(PokerHand.TexasPattern.HighHand, p);
         }
 
@@ -117,13 +120,16 @@ namespace TexasPokerCaculator
 
         private List<Poker> FindStraightFlush(List<Poker> pokers)
         {
-            List<Poker> pStraight = FindStraight(pokers);
-            if (pStraight != null)
+            List<Poker> pSF = this.SortPokersBySuitThenPoint(pokers);
+            for (int i = 0; i < pokers.Count - 4; i++)
             {
-                List<Poker> pStraightFlush = FindFlush(pStraight);
-                if (pStraightFlush != null)
+                if (pSF[i].Point == pSF[i + 1].Point + 1 &&
+                    pSF[i].Point == pSF[i + 2].Point + 2 &&
+                    pSF[i].Point == pSF[i + 3].Point + 3 &&
+                    pSF[i].Point == pSF[i + 4].Point + 4 &&
+                    pSF[i].Suit == pSF[i + 4].Suit)
                 {
-                    return pStraightFlush;
+                    return ClonePokers(pSF, i, i + 4);
                 }
             }
 
@@ -279,15 +285,15 @@ namespace TexasPokerCaculator
             return p;
         }
 
-        private List<Poker> RemovePokers(List<Poker> pokers, List<Poker> pokersInPattern)
+        private List<Poker> RemovePokers(List<Poker> pokers, List<Poker> pokersRemove)
         {
             List<Poker> result = ClonePokers(pokers, 0, pokers.Count - 1);
 
             for (int i = result.Count - 1; i >= 0; i--)
             {
-                for (int j = 0; j < pokersInPattern.Count; j++)
+                for (int j = 0; j < pokersRemove.Count; j++)
                 {
-                    if (result[i].Value == pokersInPattern[j].Value)
+                    if (result[i].Value == pokersRemove[j].Value)
                     {
                         result.RemoveAt(i);
                         break;  //If don't break, result[i] will be assess after removed
@@ -310,6 +316,62 @@ namespace TexasPokerCaculator
             }
 
             return sb.ToString();
+        }
+
+        public List<PokerHand> PridectRoyalFlush1(List<Poker> currentPokers)
+        {
+            List<PokerHand> pokerHands = new List<PokerHand>();
+            List<Poker> allPoksers = this.CreateAllPokers();
+
+            List<Poker> outPoksers = this.RemovePokers(allPoksers, currentPokers);
+
+            for (int i = 0; i < outPoksers.Count; i++)
+            {
+                List<Poker> pridectPokers = ClonePokers(currentPokers);
+                pridectPokers.Add(outPoksers[i]);
+
+                List<Poker> handPokers = FindRoyalFlush(pridectPokers);
+                if (handPokers != null)
+                {
+                    pokerHands.Add(new PokerHand(PokerHand.TexasPattern.RoyalFlush, handPokers));
+                }
+            }
+            return pokerHands;
+        }
+
+
+        private List<Poker> ClonePokers(List<Poker> sourcePokers)
+        {
+            List<Poker> pokers = new List<Poker>();
+            for (int i = 0; i < sourcePokers.Count; i++)
+            {
+                pokers.Add(new Poker(sourcePokers[i].Value));
+            }
+            return pokers;
+        }
+
+        private List<Poker> ClonePokers(List<Poker> source1, List<Poker> source2)
+        {
+            List<Poker> pokers = new List<Poker>();
+            for (int i = 0; i < source1.Count; i++)
+            {
+                pokers.Add(new Poker(source1[i].Value));
+            }
+
+            for (int i = 0; i < source2.Count; i++)
+            {
+                pokers.Add(new Poker(source2[i].Value));
+            }
+            return pokers;
+        }
+        private List<Poker> CreateAllPokers()
+        {
+            List<Poker> pokers = new List<Poker>();
+            for (int i = 0; i < 52; i++)
+            {
+                pokers.Add(new Poker(i));
+            }
+            return pokers;
         }
     }
 }
